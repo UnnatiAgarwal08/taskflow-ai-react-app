@@ -18,7 +18,7 @@ export default function CompletedPage() {
 
       {completedTasks.length === 0 ? (
         <div className="bg-white rounded-card shadow-card border border-line p-8 text-center text-inkSoft text-sm">
-          Nothing completed yet. Finish a task and it'll show up here.
+          Nothing completed yet. Finish a task and it&apos;ll show up here.
         </div>
       ) : (
         <div className="flex flex-col gap-3">
