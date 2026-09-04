@@ -127,3 +127,31 @@ No additional configuration is required.
 
 ## License
 This project is developed as part of the FlyRank Front-End AI Engineering Internship.
+
+
+## AI Tool Contract
+### `getTaskStats`
+Server-side AI tool that returns structured task statistics.
+**Input:**
+```js
+{}
+```
+**Output:**
+```js
+{
+  total: number,
+  completed: number,
+  pending: number,
+  completionRate: number
+}
+```
+**Implementation:**
+Defined in `app/api/chat/route.js` using a Zod schema and `execute` function.
+**Lifecycle UI:**
+Handled in `app/ai-chat/page.jsx` with distinct states for:
+* `input-streaming` — Preparing task statistics
+* `input-available` — Fetching task statistics
+* `output-available` — Displays Task Statistics card
+* `output-error` — Displays error message
+**Example:**
+User asks: *"How many tasks do I have?"* → TaskFlow AI calls `getTaskStats` and displays the statistics.

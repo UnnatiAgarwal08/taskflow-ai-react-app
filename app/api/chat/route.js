@@ -1,54 +1,12 @@
 import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
 import { convertToModelMessages, streamText } from "ai";
-import { z } from "zod";
+import { getTaskStats } from "@/lib/tools/getTaskStats";
 
 const openrouter = createOpenAICompatible({
   name: "openrouter",
   apiKey: process.env.OPENROUTER_API_KEY,
   baseURL: "https://openrouter.ai/api/v1",
 });
-
-// TaskFlow AI tool
-// Returns structured information about the user's tasks.
-const getTaskStats = {
-  description:
-    "Get statistics about the user's tasks, including total, completed, pending tasks, and completion rate.",
-
-  inputSchema: z.object({}),
-
-  execute: async () => {
-    console.log("🔥 getTaskStats TOOL WAS CALLED");
-
-    // Sample TaskFlow data
-    const tasks = [
-      { id: 1, completed: true },
-      { id: 2, completed: true },
-      { id: 3, completed: false },
-      { id: 4, completed: true },
-      { id: 5, completed: false },
-    ];
-
-    const total = tasks.length;
-
-    const completed = tasks.filter(
-      (task) => task.completed
-    ).length;
-
-    const pending = total - completed;
-
-    const completionRate =
-      total === 0
-        ? 0
-        : Math.round((completed / total) * 100);
-
-    return {
-      total,
-      completed,
-      pending,
-      completionRate,
-    };
-  },
-};
 
 export async function POST(req) {
   try {
