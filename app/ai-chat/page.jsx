@@ -1,6 +1,5 @@
 "use client";
 
-console.log("🔥🔥🔥 THIS IS THE AI CHAT PAGE 🔥🔥🔥");
 import { useChat } from "@ai-sdk/react";
 import { useState } from "react";
 
@@ -73,14 +72,15 @@ function ToolErrorCard({ errorText }) {
 export default function AIChatPage() {
   const [input, setInput] = useState("");
 
-  const { messages, sendMessage, status } = useChat({
+  const {
+    messages,
+    sendMessage,
+    status,
+    error,
+    regenerate,
+  } = useChat({
     api: "/api/chat",
   });
-
-  // Debug logs
-  console.log("AI CHAT PAGE IS RENDERING");
-  console.log("MESSAGES FROM USECHAT:", messages);
-  console.log("CHAT STATUS:", status);
 
   const isLoading =
     status === "submitted" || status === "streaming";
@@ -99,10 +99,13 @@ export default function AIChatPage() {
     });
   };
 
+  const handleRetry = async () => {
+    await regenerate();
+  };
+
   return (
     <main className="min-h-screen bg-gray-50 p-6">
       <div className="mx-auto flex max-w-3xl flex-col">
-
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">
@@ -116,21 +119,37 @@ export default function AIChatPage() {
 
         {/* Chat messages */}
         <div className="mb-6 flex min-h-[400px] flex-col gap-4 rounded-xl border bg-white p-6">
-
+          {/* First-run empty state */}
           {messages.length === 0 && (
             <div className="flex flex-1 items-center justify-center text-center text-gray-400">
-              <div>
-                <h2 className="text-xl font-semibold">
-                  Ask TaskFlow
+              <div className="max-w-md">
+                <h2 className="text-xl font-semibold text-gray-900">
+                  👋 Hi! I&apos;m TaskFlow AI
                 </h2>
 
                 <p className="mt-2">
-                  Try asking: &quot;How many tasks do I have?&quot;
+                  I can help you organize, prioritize, and understand your
+                  tasks.
                 </p>
+
+                <p className="mt-4 text-sm font-medium text-gray-700">
+                  Not sure what to ask?
+                </p>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    setInput("How many tasks do I have?")
+                  }
+                  className="mt-2 rounded-lg border border-blue-200 bg-blue-50 px-4 py-2 text-sm text-blue-700 transition hover:bg-blue-100"
+                >
+                  How many tasks do I have? →
+                </button>
               </div>
             </div>
           )}
 
+          {/* Messages */}
           {messages.map((message) => (
             <div
               key={message.id}
@@ -147,7 +166,6 @@ export default function AIChatPage() {
                     : "bg-gray-100 text-gray-900"
                 }`}
               >
-
                 {/* Name */}
                 <div className="mb-1 text-xs font-semibold opacity-60">
                   {message.role === "user"
@@ -158,8 +176,6 @@ export default function AIChatPage() {
                 {/* Message parts */}
                 {message.parts?.map((part, index) => {
                   const key = `${message.id}-${index}`;
-
-                  console.log("AI CHAT PART:", part);
 
                   {/* Normal text */}
                   if (part.type === "text") {
@@ -244,21 +260,58 @@ export default function AIChatPage() {
             </div>
           ))}
 
-          {/* Thinking indicator */}
+          {/* Loading skeleton */}
           {isLoading && (
             <div className="flex justify-start">
-              <div className="rounded-xl bg-gray-100 px-4 py-3">
+              <div className="w-full max-w-[85%] rounded-xl bg-gray-100 px-4 py-3">
                 <div className="text-xs font-semibold opacity-60">
                   TaskFlow AI
                 </div>
 
-                <div className="mt-1 text-gray-500">
-                  TaskFlow is thinking...
+                <div className="mt-3 space-y-2">
+                  <div className="h-3 w-3/4 animate-pulse rounded bg-gray-300" />
+                  <div className="h-3 w-1/2 animate-pulse rounded bg-gray-300" />
+                  <div className="h-3 w-2/3 animate-pulse rounded bg-gray-300" />
                 </div>
+
+                <p className="mt-3 text-xs text-gray-500">
+                  TaskFlow is thinking...
+                </p>
               </div>
             </div>
           )}
         </div>
+
+        {/* Chat error */}
+        {error && (
+          <div className="mb-4 rounded-xl border border-red-200 bg-red-50 p-4">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <h3 className="font-semibold text-red-800">
+                  ⚠️ Something went wrong
+                </h3>
+
+                <p className="mt-1 text-sm text-red-700">
+                  TaskFlow AI could not complete your request.
+                </p>
+
+                <p className="mt-1 text-xs text-red-600">
+                  You can retry the failed message without starting a
+                  new conversation.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleRetry}
+                disabled={isLoading}
+                className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                Retry
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Input */}
         <form
@@ -269,7 +322,8 @@ export default function AIChatPage() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask TaskFlow AI..."
-            className="flex-1 rounded-xl border bg-white px-4 py-3 outline-none focus:ring-2 focus:ring-black"
+            disabled={isLoading}
+            className="flex-1 rounded-xl border bg-white px-4 py-3 outline-none focus:ring-2 focus:ring-black disabled:cursor-not-allowed disabled:bg-gray-100"
           />
 
           <button
@@ -284,4 +338,3 @@ export default function AIChatPage() {
     </main>
   );
 }
-
