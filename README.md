@@ -1,73 +1,125 @@
 # TaskFlow
-A small, focused task manager built with Next.js App Router, React state, and Tailwind CSS.
+TaskFlow is a simple task management web application built with Next.js, React, and Tailwind CSS. It allows users to create, manage, and track tasks through a clean and responsive interface.
+The project was developed as part of the FlyRank Front-End AI Engineering Internship.
 
 
 ## Tech Stack
-- **Framework:** Next.js (App Router)
-- **Library:** React
-- **Styling:** Tailwind CSS
-- **State Management:** React Context API
-- **Language:** JavaScript
-- **Deployment:** Vercel
-- **Development Approach:** AI-assisted development workflow
+* **Framework:** Next.js
+* **Library:** React
+* **Styling:** Tailwind CSS
+* **Language:** JavaScript
+* **State Management:** React Context API
+* **Storage:** Browser localStorage
+* **3D:** Three.js and React Three Fiber
+* **Deployment:** Vercel
 
 
 ## Features
-- Create and manage tasks
-- Mark tasks as completed
-- Delete tasks
-- Track task progress through dashboard statistics
-- Store tasks using localStorage persistence
-- Responsive UI for desktop and mobile
-- Dark mode support
-- Health API monitoring endpoint
+* Create and manage tasks
+* Mark tasks as completed
+* Delete tasks
+* Set task priority and deadline
+* View task progress on the dashboard
+* Store tasks using localStorage
+* Responsive design for desktop and mobile
+* Dark mode
+* Health check page and API
+* AI chat for viewing task statistics
+* Interactive 3D task visualization
 
 
-## Run it locally
-This project follows the structure and requirements defined in the FE-04 assignment, including routing, reusable components, Tailwind styling, and a health check endpoint.
- To get it running:
+## FE-AA2 — 3D Web Experience
+A separate 3D experience was added to TaskFlow at:
+```text
+/fe-aa2
+```
+The page uses Three.js with React Three Fiber to display an interactive 3D cube representing task status.
+
+
+### 3D Interactions
+The user can select different task statuses:
+* **Pending** — Indigo
+* **Completed** — Green
+* **Overdue** — Red
+Changing the status changes the color of the 3D cube.
+The cube can also be rotated and zoomed using the available controls.
+The 3D experience is kept simple by using a basic cube instead of a large 3D model. This helps keep the page lightweight and easier to use on different devices.
+
+
+## Performance
+The FE-AA2 page was tested using the production build:
+```bash
+npm run build
+```
+The build completed successfully with the 3D page included.
+The 3D experience uses a simple object and does not require a large external model. The 3D section is also loaded separately from the main application.
+
+
+## Future Improvements
+With more time, the 3D experience could be improved by:
+* Adding a more detailed 3D task model
+* Adding animations when the task status changes
+* Adding more visual effects and lighting
+* Improving the 3D experience for different mobile devices
+* Connecting the 3D visualization with the actual tasks in TaskFlow
+
+
+## Run Locally
+Clone the repository and install the required packages:
 ```bash
 cd taskflow
 npm install
 npm run dev
 ```
-
-Then open http://localhost:3000.
-
-
-## What's included
-- **Home** — welcome message, project intro, "Get Started" button
-- **Dashboard** — total / completed / pending counts, plus a progress ring
-- **Tasks** — full task list with complete + delete actions
-- **Add Task** — form with name, description, priority, deadline
-- **Completed Tasks** — filtered view of finished tasks
-- **Settings** — Dark Mode and Notifications toggles
-- **Health** — `/api/health` route + a page that fetches it live, satisfying the FE-04 health check requirement
-## How task data works
-Tasks live in `context/TaskContext.jsx` — a small Context provider that holds
-the task list and persists it to `localStorage`, so it's shared across every
-page (Tasks, Add Task, Completed, Dashboard) without a backend. This is one
-addition beyond the folder list in the brief, but it's what makes "Add Task"
-actually show up in "Tasks" and "Dashboard" without a database.
-
-
-## Design Tokens
-- Custom color palette for backgrounds, priorities, and completed tasks
-- Responsive typography using Google Fonts
-- Dashboard progress ring and priority indicators for visual feedback
-
-
-## Folder structure
+Then open:
+```text
+http://localhost:3000
 ```
+The 3D experience can be opened at:
+```text
+http://localhost:3000/fe-aa2
+```
+
+
+## Main Pages
+* **Home** — Introduction to TaskFlow
+* **Dashboard** — Shows task statistics and progress
+* **Tasks** — View, complete, and delete tasks
+* **Add Task** — Create a new task
+* **Completed Tasks** — View completed tasks
+* **Settings** — Application settings
+* **Health** — Application health check
+* **AI Chat** — Interact with the task statistics feature
+* **FE-AA1** — Button interaction and animation demo
+* **FE-AA2** — Interactive 3D experience
+
+
+## How Task Data Works
+Task data is managed using React Context API in:
+```text
+context/TaskContext.jsx
+```
+The task list is stored in the browser's localStorage. This allows tasks to remain available when moving between different pages of the application without requiring a separate database.
+
+
+## Project Structure
+```text
 app/
-├── page.js              ← Home
+├── page.js
 ├── dashboard/page.js
 ├── tasks/page.js
 ├── add-task/page.js
 ├── completed/page.js
 ├── settings/page.js
 ├── health/page.js
-├── api/health/route.js  ← health check data
+├── ai-chat/page.jsx
+├── fe-aa1/page.jsx
+├── fe-aa2/
+│   ├── page.jsx
+│   └── ThreeScene.jsx
+├── api/
+│   └── health/
+│       └── route.js
 ├── layout.js
 └── globals.css
 
@@ -79,21 +131,34 @@ components/
 └── DashboardCard.jsx
 
 context/
-└── TaskContext.jsx      ← shared task state + localStorage
+└── TaskContext.jsx
 ```
 
 
-## Development Notes
-Some AI-assisted prompts used during development:
-- "Explain how `TaskContext.jsx` shares state between pages."
-- "Add a filter to the Tasks page so I can show only High priority tasks."
-- "Add sorting by deadline to the Tasks page."
-- "Write a test for `toggleComplete` in TaskContext."
+## Development
+The project was developed using an AI-assisted workflow.
+AI tools were used to help with:
+* Understanding Next.js and React concepts
+* Debugging development issues
+* Improving components and UI
+* Writing and improving tests
+* Exploring Three.js and React Three Fiber
+* Reviewing implementation and documentation
+The implementation and testing were done as part of the development process.
+Additional project documentation:
+* `AI_PROMPTS.md`
+* `AI_ASSISTANCE.md`
+* `MANUAL_IMPROVEMENTS.md`
 
 
 ## Live Demo
-Deployed Application:
+Main application:
 https://taskflow-ai-react-app-d8p1.vercel.app/
+FE-AA2:
+```text
+https://taskflow-ai-react-app-d8p1.vercel.app/fe-aa2
+```
+The FE-AA2 URL should be checked again after the latest changes are deployed.
 
 
 ## Repository
@@ -101,42 +166,19 @@ GitHub:
 https://github.com/UnnatiAgarwal08/taskflow-ai-react-app
 
 
-## AI-Assisted Development
-AI tools were used throughout development as a coding assistant for:
-- Exploring Next.js App Router structure
-- Improving component organization
-- Debugging implementation issues
-- Reviewing UI improvements
-- Refining documentation
-
-Documentation:
-- `AI_PROMPTS.md` — prompts used during development
-- `AI_ASSISTANCE.md` — AI contributions and workflow
-- `MANUAL_IMPROVEMENTS.md` — manual changes and refinements
-
-
 ## Deployment
-The application is deployed using Vercel.
-Steps:
-1. Push the repository to GitHub
-2. Import the repository into Vercel
-3. Select Next.js framework preset
-4. Deploy
-No additional configuration is required.
+The project is deployed using Vercel.
+Basic deployment process:
+1. Push the project to GitHub
+2. Connect the repository to Vercel
+3. Select the Next.js project
+4. Deploy the application
 
 
-## License
-This project is developed as part of the FlyRank Front-End AI Engineering Internship.
+## AI Task Statistics
+TaskFlow also includes an AI feature that can provide task statistics.
+The `getTaskStats` tool returns:
 
-
-## AI Tool Contract
-### `getTaskStats`
-Server-side AI tool that returns structured task statistics.
-**Input:**
-```js
-{}
-```
-**Output:**
 ```js
 {
   total: number,
@@ -145,13 +187,10 @@ Server-side AI tool that returns structured task statistics.
   completionRate: number
 }
 ```
-**Implementation:**
-Defined in `app/api/chat/route.js` using a Zod schema and `execute` function.
-**Lifecycle UI:**
-Handled in `app/ai-chat/page.jsx` with distinct states for:
-* `input-streaming` — Preparing task statistics
-* `input-available` — Fetching task statistics
-* `output-available` — Displays Task Statistics card
-* `output-error` — Displays error message
-**Example:**
-User asks: *"How many tasks do I have?"* → TaskFlow AI calls `getTaskStats` and displays the statistics.
+For example, a user can ask:
+> "How many tasks do I have?"
+The AI can use the task statistics feature to provide the current task counts.
+
+
+## License
+This project was developed as part of the FlyRank Front-End AI Engineering Internship.
