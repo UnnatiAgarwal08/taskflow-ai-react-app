@@ -7,9 +7,13 @@ function TaskStatsCard({ output }) {
   if (!output) return null;
 
   return (
-    <div className="mt-3 rounded-xl border border-blue-200 bg-blue-50 p-4">
+    <div
+      className="mt-3 rounded-xl border border-blue-200 bg-blue-50 p-4"
+      aria-label="Task statistics"
+    >
       <h3 className="mb-3 font-semibold text-blue-900">
-        📊 Task Statistics
+        <span aria-hidden="true">📊 </span>
+        Task Statistics
       </h3>
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -45,9 +49,14 @@ function TaskStatsCard({ output }) {
 
 function ToolErrorCard({ errorText }) {
   return (
-    <div className="mt-3 rounded-xl border border-red-200 bg-red-50 p-4">
+    <div
+      className="mt-3 rounded-xl border border-red-200 bg-red-50 p-4"
+      role="alert"
+    >
       <div className="flex items-start gap-3">
-        <div className="text-xl">⚠️</div>
+        <div className="text-xl" aria-hidden="true">
+          ⚠️
+        </div>
 
         <div>
           <h3 className="font-semibold text-red-800">
@@ -104,10 +113,13 @@ export default function AIChatPage() {
   };
 
   return (
-    <main className="min-h-screen bg-gray-50 p-6">
+    <main
+      className="min-h-screen bg-gray-50 p-6"
+      aria-busy={isLoading}
+    >
       <div className="mx-auto flex max-w-3xl flex-col">
         {/* Header */}
-        <div className="mb-8">
+        <header className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">
             TaskFlow AI
           </h1>
@@ -115,16 +127,20 @@ export default function AIChatPage() {
           <p className="mt-2 text-gray-500">
             Ask TaskFlow AI to help organize and manage your tasks.
           </p>
-        </div>
+        </header>
 
         {/* Chat messages */}
-        <div className="mb-6 flex min-h-[400px] flex-col gap-4 rounded-xl border bg-white p-6">
+        <section
+          aria-label="TaskFlow AI conversation"
+          className="mb-6 flex min-h-[400px] flex-col gap-4 rounded-xl border bg-white p-6"
+        >
           {/* First-run empty state */}
           {messages.length === 0 && (
             <div className="flex flex-1 items-center justify-center text-center text-gray-400">
               <div className="max-w-md">
                 <h2 className="text-xl font-semibold text-gray-900">
-                  👋 Hi! I&apos;m TaskFlow AI
+                  <span aria-hidden="true">👋 </span>
+                  Hi! I&apos;m TaskFlow AI
                 </h2>
 
                 <p className="mt-2">
@@ -141,7 +157,7 @@ export default function AIChatPage() {
                   onClick={() =>
                     setInput("How many tasks do I have?")
                   }
-                  className="mt-2 rounded-lg border border-blue-200 bg-blue-50 px-4 py-2 text-sm text-blue-700 transition hover:bg-blue-100"
+                  className="mt-2 rounded-lg border border-blue-200 bg-blue-50 px-4 py-2 text-sm text-blue-700 transition hover:bg-blue-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
                 >
                   How many tasks do I have? →
                 </button>
@@ -183,6 +199,11 @@ export default function AIChatPage() {
                       <p
                         key={key}
                         className="whitespace-pre-wrap"
+                        aria-live={
+                          message.role === "assistant"
+                            ? "polite"
+                            : undefined
+                        }
                       >
                         {part.text}
                       </p>
@@ -204,9 +225,12 @@ export default function AIChatPage() {
                       <div
                         key={key}
                         className="mt-2 rounded-lg border border-blue-200 bg-blue-50 p-3 text-sm text-blue-800"
+                        role="status"
+                        aria-live="polite"
                       >
                         <div className="font-medium">
-                          🔄 Preparing task statistics
+                          <span aria-hidden="true">🔄 </span>
+                          Preparing task statistics
                         </div>
 
                         <p className="mt-1 text-xs opacity-80">
@@ -222,9 +246,12 @@ export default function AIChatPage() {
                       <div
                         key={key}
                         className="mt-2 rounded-lg border border-yellow-200 bg-yellow-50 p-3 text-sm text-yellow-800"
+                        role="status"
+                        aria-live="polite"
                       >
                         <div className="font-medium">
-                          ⚙️ Fetching task statistics
+                          <span aria-hidden="true">⚙️ </span>
+                          Fetching task statistics
                         </div>
 
                         <p className="mt-1 text-xs opacity-80">
@@ -262,13 +289,21 @@ export default function AIChatPage() {
 
           {/* Loading skeleton */}
           {isLoading && (
-            <div className="flex justify-start">
+            <div
+              className="flex justify-start"
+              role="status"
+              aria-live="polite"
+              aria-label="TaskFlow AI is thinking"
+            >
               <div className="w-full max-w-[85%] rounded-xl bg-gray-100 px-4 py-3">
                 <div className="text-xs font-semibold opacity-60">
                   TaskFlow AI
                 </div>
 
-                <div className="mt-3 space-y-2">
+                <div
+                  className="mt-3 space-y-2"
+                  aria-hidden="true"
+                >
                   <div className="h-3 w-3/4 animate-pulse rounded bg-gray-300" />
                   <div className="h-3 w-1/2 animate-pulse rounded bg-gray-300" />
                   <div className="h-3 w-2/3 animate-pulse rounded bg-gray-300" />
@@ -280,16 +315,20 @@ export default function AIChatPage() {
               </div>
             </div>
           )}
-        </div>
+        </section>
 
         {/* Chat error */}
         {error && (
-          <div className="mb-4 rounded-xl border border-red-200 bg-red-50 p-4">
+          <div
+            className="mb-4 rounded-xl border border-red-200 bg-red-50 p-4"
+            role="alert"
+          >
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <h3 className="font-semibold text-red-800">
-                  ⚠️ Something went wrong
-                </h3>
+                <h2 className="font-semibold text-red-800">
+                  <span aria-hidden="true">⚠️ </span>
+                  Something went wrong
+                </h2>
 
                 <p className="mt-1 text-sm text-red-700">
                   TaskFlow AI could not complete your request.
@@ -305,7 +344,8 @@ export default function AIChatPage() {
                 type="button"
                 onClick={handleRetry}
                 disabled={isLoading}
-                className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
+                aria-label="Retry failed AI message"
+                className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Retry
               </button>
@@ -316,20 +356,32 @@ export default function AIChatPage() {
         {/* Input */}
         <form
           onSubmit={handleSubmit}
+          aria-label="Send a message to TaskFlow AI"
           className="flex gap-3"
         >
+          <label htmlFor="ai-chat-input" className="sr-only">
+            Ask TaskFlow AI
+          </label>
+
           <input
+            id="ai-chat-input"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask TaskFlow AI..."
+            aria-label="Ask TaskFlow AI"
             disabled={isLoading}
-            className="flex-1 rounded-xl border bg-white px-4 py-3 outline-none focus:ring-2 focus:ring-black disabled:cursor-not-allowed disabled:bg-gray-100"
+            className="flex-1 rounded-xl border bg-white px-4 py-3 outline-none focus:ring-2 focus:ring-black focus-visible:ring-2 focus-visible:ring-black disabled:cursor-not-allowed disabled:bg-gray-100"
           />
 
           <button
             type="submit"
             disabled={isLoading || !input.trim()}
-            className="rounded-xl bg-black px-6 py-3 font-medium text-white disabled:cursor-not-allowed disabled:opacity-50"
+            aria-label={
+              isLoading
+                ? "TaskFlow AI is thinking"
+                : "Send message"
+            }
+            className="rounded-xl bg-black px-6 py-3 font-medium text-white transition hover:bg-gray-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isLoading ? "Thinking..." : "Send"}
           </button>
