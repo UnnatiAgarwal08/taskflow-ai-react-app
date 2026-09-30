@@ -192,5 +192,85 @@ For example, a user can ask:
 The AI can use the task statistics feature to provide the current task counts.
 
 
+## FE-AA3 — Fullscreen Shader Hero
+A fullscreen WebGL shader hero was added to TaskFlow at:
+```text
+/fe-aa3
+
+
+## Environment Variables
+TaskFlow uses an environment variable for the AI chat feature.
+Create a `.env.local` file in the project root:
+```env
+OPENROUTER_API_KEY=your_openrouter_api_key
+
+
+## Screenshots
+### Home
+![TaskFlow Home](public/screenshots/home.png)
+
+### Dashboard
+![TaskFlow Dashboard](public/screenshots/dashboard.png)
+
+### Tasks
+![TaskFlow Tasks](public/screenshots/tasks.png)
+
+### AI Chat
+![TaskFlow AI Chat](public/screenshots/ai-chat.png)
+
+### FE-AA2 — 3D Experience
+![TaskFlow FE-AA2](public/screenshots/fe-aa2.png)
+
+### FE-AA3 — Fullscreen Shader Hero
+![TaskFlow FE-AA3](public/screenshots/fe-aa3.png)
+
+
+## Architecture Overview
+TaskFlow is built using Next.js and React.
+- The UI is built with Next.js App Router and React.
+- Task data is managed using React Context API.
+- Tasks are stored in browser localStorage.
+- The AI Chat page communicates with the `/api/chat` route.
+- The `/api/chat` route uses the Vercel AI SDK to stream responses.
+- OpenRouter is used as the AI model provider.
+- The `getTaskStats` tool provides task statistics to the AI.
+- The application is deployed to Vercel.
+
+
+### AI Request Flow
+User
+  ↓
+AI Chat UI
+  ↓
+/api/chat
+  ↓
+Input validation and request limits
+  ↓
+OpenRouter
+  ↓
+AI model
+  ↓
+Streaming response
+  ↓
+AI Chat UI
+
+
+## API Protection
+The AI chat API includes production safeguards to reduce unnecessary
+or abusive API usage.
+- Request input limits
+- Message size limits
+- Rate limiting
+- Streaming execution timeout
+- Invalid request handling
+
+
+## Testing
+The project was tested using the production build:
+```bash
+npm run build
+
+
 ## License
 This project was developed as part of the FlyRank Front-End AI Engineering Internship.
+

@@ -2,6 +2,8 @@ import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
 import { convertToModelMessages, streamText } from "ai";
 import { getTaskStats } from "@/lib/tools/getTaskStats";
 
+export const maxDuration = 30;
+
 const openrouter = createOpenAICompatible({
   name: "openrouter",
   apiKey: process.env.OPENROUTER_API_KEY,
@@ -10,7 +12,51 @@ const openrouter = createOpenAICompatible({
 
 export async function POST(req) {
   try {
+    const contentLength = req.headers.get("content-length");
+
+    if (contentLength && Number(contentLength) > 100000) {
+      return new Response(
+        JSON.stringify({
+          error: "Request too large",
+        }),
+        {
+          status: 413,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    }
+
     const { messages } = await req.json();
+
+    if (!Array.isArray(messages)) {
+      return new Response(
+        JSON.stringify({
+          error: "Invalid messages format",
+        }),
+        {
+          status: 400,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    }
+
+    if (messages.length > 20) {
+      return new Response(
+        JSON.stringify({
+          error: "Too many messages",
+        }),
+        {
+          status: 400,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    }
 
     const result = streamText({
       model: openrouter("openai/gpt-4o-mini"),
